@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>Quote Generator</title>
+    <style>
+        body {
+            margin: auto;
+            padding: 0;
+            box-sizing: border-box;
+            display: flex;
+            width: 100%;
+            height: 100vh;
+            /* text-align: center; */
+            align-items: center;
+            justify-content: center;
+            background-color: black;
+            font-size: x-large;
+        }
+
+        .container {
+            text-align: center;
+            background-color: white;
+            border-radius: 20px;
+            height: auto;
+            width: 50%;
+            padding: 30px;
+        }
+
+        .authordescribe {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            width: 100%;
+            float: right;
+            padding: 10px;
+            justify-content: end;
+        }
+
+        footer {
+            display: flex;
+            /* justify-content: space-around; */
+            align-items: center;
+        }
+
+
+
+        ul {
+            list-style: none;
+            display: flex;
+            justify-content: space-around;
+            /* gap: 10px; */
+            margin: 0;
+            align-items: center;
+            padding: 0;
+        }
+
+        .col-3 {
+            width: 40%;
+        }
+
+        .col-6 {
+            width: 50%;
+        }
+
+        li {
+            width: 45px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 45px;
+            border-radius: 50%;
+            border: 1px solid rgb(65, 65, 173);
+            font-size: large;
+            color: rgb(65, 65, 173);
+            cursor: pointer;
+            transition: all ease 0.3s;
+        }
+
+
+        li:hover {
+            background-color: rgb(67, 67, 143);
+            color: white;
+            transform: scale(1.2);
+        }
+
+        #newquote {
+            font-size: medium;
+            padding: 10px;
+            background-color: rgb(65, 65, 173);
+            padding: 10px 20px;
+            cursor: pointer;
+            color: white;
+            border: none;
+            border-radius: 20px;
+        }
+
+        #newquote:hover {
+            box-shadow: 0 0 10px blue;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Quote of the day</h1>
+        <div class="quotedescribe">
+            <i class="fa-solid fa-quote-left"></i>
+            <span id="quote">Never give up because you never know if the next try is going to be the one that works.
+            </span>
+            <i class="fa-solid fa-quote-right"></i>
+        </div>
+        <div class="authordescribe">
+            <i class="fa-solid fa-minus"></i>
+            <i class="fa-solid fa-minus"></i>
+            <p id="author">Mary Kay Ash</p>
+        </div>
+        <hr>
+        <footer>
+            <ul class="col-3 socialmedia">
+                <li id="speak"><i class="fa-solid fa-volume-high "></i></li>
+                <li id="copy"> <i class="fa-solid fa-copy "></i></li>
+                <li id="twitter"><i class="fa-brands fa-twitter "></i></li>
+            </ul>
+            <div class="col-6"></div>
+            <div class="col-3">
+                <button type="submit" id="newquote">New Quote</button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- javascript -->
+    <script>
+        let quote = document.getElementById("quote");
+        let quotebtn = document.getElementById("newquote");
+        let speak = document.getElementById("speak")
+        let copy = document.getElementById("copy")
+        let twitter = document.getElementById("twitter")
+
+
+        function randomQuote() {
+            quotebtn.classList.add("loading");
+            quotebtn.innerText = "Loading...."
+            fetch("https://api.quotable.io/random").then(res => res.json()).then(result => {
+                // console.log(result);
+                quote.innerHTML = result.content
+                author.innerHTML = result.author
+                quotebtn.innerText = "New Quote"
+
+            });
+        };
+        quotebtn.addEventListener("click", randomQuote);
+
+        // read aloud
+        speak.addEventListener("click", () => {
+            let utterance = new SpeechSynthesisUtterance(quote.innerHTML + "by " + author.innerHTML);
+            speechSynthesis.speak(utterance);
+        })
+
+        // copy
+        copy.addEventListener("click", () => {
+            navigator.clipboard.writeText(quote.innerHTML);
+        })
+
+        // twitter
+        twitter.addEventListener("click", () => {
+            let twiturl = 'https://twitter.com';
+            window.open(twiturl, "_blank");
+        })
+    </script>
+</body>
+
+</html>
